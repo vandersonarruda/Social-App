@@ -1,21 +1,31 @@
 import React, { useState, useContext } from "react";
+import { TouchableWithoutFeedback, Keyboard } from "react-native";
+import * as firebase from "firebase";
 
-import { ErrorMessage } from "../../styles/utils";
-import {
-  Wrapper,
-  Title,
-  Form,
-  Input,
-  InputLabel,
-  InputField,
-  ButtonSignIn,
-  ButtonSignInLabel,
-  ButtonSignUp,
-  ButtonSignUpLabel,
-  Bold,
-} from "../../styles/signin";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+// import { Dimensions } from "react-native";
 
 import AuthContext from "../../contexts/auth";
+import Header from "../../components/AuthHeader";
+
+import {
+  Container,
+  FormContainer,
+  FormField,
+  FormInput,
+  FormIcon,
+  ErrorText,
+  ButtonForgot,
+  ButtonForgotLabel,
+  ButtonConfirm,
+  ButtonConfirmLabel,
+  ButtonPage,
+  ButtonPageLabel,
+  ButtonGradient,
+  Link,
+} from "./styles";
+
+// const screenWidth = Dimensions.get("window").width;
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -25,50 +35,84 @@ export default function Login({ navigation }) {
   const { signIn } = useContext(AuthContext);
 
   function handleSignIn() {
-    signIn();
+    setErrorMessage("");
+    Keyboard.dismiss();
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        signIn();
+      })
+      .catch((error) => setErrorMessage(error.message));
   }
 
   return (
-    <Wrapper>
-      <Title>{`Hello again.\n welcome back`}</Title>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <Container>
+        <Header
+          title="Hello there!"
+          subtitle="Sign in to continue"
+          navigation={navigation}
+        />
 
-      <Form>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-        <Input>
-          <InputLabel>Email:</InputLabel>
-          <InputField
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder={"Email"}
-            value={email}
-            onChangeText={setEmail}
-          />
-        </Input>
-        <Input>
-          <InputLabel>Password:</InputLabel>
-          <InputField
-            placeholder={"Password"}
-            autoCapitalize="none"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </Input>
-        <ButtonSignIn>
-          <ButtonSignInLabel>Sign in</ButtonSignInLabel>
-        </ButtonSignIn>
+        <FormContainer>
+          <ErrorText>{errorMessage}</ErrorText>
 
-        <ButtonSignUp
-          onPress={handleSignIn}
-          // onPress={() => {
-          //   navigation.navigate("SignUp");
-          // }}
-        >
-          <ButtonSignUpLabel>
-            New to SocialApp? <Bold>Sign Up</Bold>
-          </ButtonSignUpLabel>
-        </ButtonSignUp>
-      </Form>
-    </Wrapper>
+          <FormField>
+            <FormInput
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder={"E-mail"}
+              value={email}
+              onChangeText={setEmail}
+            />
+            <FormIcon>
+              <Ionicons name="ios-mail" size={23} color="#A1AFC3" />
+            </FormIcon>
+          </FormField>
+          <FormField>
+            <FormInput
+              autoCapitalize="none"
+              placeholder={"Password"}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <FormIcon>
+              <FontAwesome5 name="key" size={18} color="#A1AFC3" />
+            </FormIcon>
+          </FormField>
+
+          <ButtonForgot onPress={() => {}}>
+            <ButtonForgotLabel>Forgot Password?</ButtonForgotLabel>
+          </ButtonForgot>
+
+          <ButtonConfirm onPress={handleSignIn}>
+            <ButtonGradient
+              colors={["#986EFF", "#6D5CFF"]}
+              start={[0, 1]}
+              end={[1, 0]}
+            >
+              <ButtonConfirmLabel>Sign In</ButtonConfirmLabel>
+            </ButtonGradient>
+          </ButtonConfirm>
+
+          <ButtonPage
+            onPress={() => {
+              navigation.navigate("SignUp");
+            }}
+          >
+            <ButtonPageLabel>
+              Don't have an account? <Link>Sign Up</Link>
+            </ButtonPageLabel>
+          </ButtonPage>
+        </FormContainer>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }

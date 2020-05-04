@@ -1,31 +1,29 @@
 import React, { useEffect, useContext } from "react";
-import { Wrapper, Title, LoadingIcon } from "../../styles/loading";
+import { Container, LoadingIcon } from "./styles";
 
 import AuthContext from "../../contexts/auth";
 
-//import * as firebase from "firebase";
+import * as firebase from "firebase";
 
 export default function Loading({ navigation }) {
-  navigation.navigate("SignIn");
+  const { signed, signIn } = useContext(AuthContext);
 
-  // const { signed, signIn } = useContext(AuthContext);
+  useEffect(() => {
+    console.log("FOI AQUI");
 
-  // signIn();
-  // console.log("signed", signed);
-
-  //useEffect(() => {
-  // return firebase.auth().onAuthStateChanged((user) => {
-  //   //console.log(user);
-  //   // const { signIn } = useContext(AuthContext);
-  //   // console.log(signIn);
-  //   if (user == null) navigation.navigate("SignIn");
-  // });
-  //});
+    firebase.auth().onAuthStateChanged((user) => {
+      //console.log("FIREBASE", user);
+      if (user == null) {
+        navigation.navigate("SignIn");
+      } else {
+        signIn();
+      }
+    });
+  });
 
   return (
-    <Wrapper>
-      <Title>Loading...</Title>
+    <Container>
       <LoadingIcon size="large" />
-    </Wrapper>
+    </Container>
   );
 }
