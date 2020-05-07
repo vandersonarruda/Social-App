@@ -16,8 +16,8 @@ import {
   ErrorText,
   ButtonConfirm,
   ButtonConfirmLabel,
-  ButtonPage,
-  ButtonPageLabel,
+  ButtonAuthMode,
+  ButtonAuthModeLabel,
   ButtonGradient,
   Link,
 } from "./styles";
@@ -130,15 +130,15 @@ recive your password reset instruction"
             </ButtonGradient>
           </ButtonConfirm>
 
-          <ButtonPage
+          <ButtonAuthMode
             onPress={() => {
               navigation.navigate("SignIn");
             }}
           >
-            <ButtonPageLabel>
+            <ButtonAuthModeLabel>
               Already have an account? <Link>Log In</Link>
-            </ButtonPageLabel>
-          </ButtonPage>
+            </ButtonAuthModeLabel>
+          </ButtonAuthMode>
         </FormContainer>
       </Container>
     </TouchableWithoutFeedback>

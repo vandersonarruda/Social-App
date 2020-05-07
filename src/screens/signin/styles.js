@@ -71,8 +71,8 @@ export const ButtonForgotLabel = styled.Text`
   font-weight: 600;
 `;
 
-export const ButtonPage = styled.TouchableOpacity``;
-export const ButtonPageLabel = styled.Text`
+export const ButtonAuthMode = styled.TouchableOpacity``;
+export const ButtonAuthModeLabel = styled.Text`
   font-size: 14px;
   color: #a1afc3;
   font-weight: 600;
